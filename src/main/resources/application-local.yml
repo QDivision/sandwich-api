@@ -1,0 +1,13 @@
+spring:
+  jpa:
+    show-sql: true
+  datasource:
+    username: admin
+    password: admin
+    url: jdbc:postgresql://localhost:5000/sandwichdb
+  liquibase:
+    user: admin
+    password: admin
+
+server:
+  port: 4000
