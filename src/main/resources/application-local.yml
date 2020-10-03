@@ -8,6 +8,11 @@ spring:
   liquibase:
     user: admin
     password: admin
+  rabbitmq:
+    host: localhost
+    username: admin
+    password: admin
+    port: 5003
 
 server:
   port: 4000
