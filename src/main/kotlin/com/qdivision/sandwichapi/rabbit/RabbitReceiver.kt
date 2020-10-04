@@ -1,6 +1,8 @@
 package com.qdivision.sandwichapi.rabbit
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.stereotype.Component
 import java.util.UUID
 
@@ -24,7 +26,8 @@ class RabbitReceiver {
     }
 
     fun receiveMessage(message: String) {
-        val msg = ObjectMapper().readValue(message, IngredientMessage::class.java)
+//        val msg = ObjectMapper().readValue(message, IngredientMessage::class.java)
+        val msg = jacksonObjectMapper().readValue<IngredientMessage>(message)
 
 //    fun receiveMessage(message: IngredientMessage) {
         println("MESSAGE: $msg")
