@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.context.request.async.DeferredResult
 import java.util.UUID
 
 @RestController
@@ -23,28 +24,22 @@ class SandwichController(
     fun getSandwiches() =
         sandwichRepository.findAll()
 
-//    @PostMapping("/sandwiches")
-//    fun postSandwich(@RequestBody sandwich: SandwichEntity) =
-//        sandwichRepository.save(sandwich)
-
     @PostMapping("/sandwiches")
-    fun postSandwich(@RequestBody sandwich: SandwichEntity) {
+    fun postSandwich(@RequestBody sandwich: SandwichEntity): DeferredResult<Unit> {
+        val result = DeferredResult<Unit>()
+
         val msg = IngredientMessage(id = UUID.randomUUID(), ingredient = Ingredient(
             name = sandwich.bread.name,
             emoji = sandwich.bread.emoji
         ))
         receiver.registerHandler(msg.id) {
-            println()
-            println()
-            println()
-            println("OMG I GOT A MESSAGE: $it")
-            println()
-            println()
-            println()
+            result.setResult(Unit)
+            receiver.unregisterHandler(msg.id)
         }
         sender.send(msg)
         sandwichRepository.save(sandwich)
-    }
 
+        return result
+    }
 
 }

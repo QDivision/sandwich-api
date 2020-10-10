@@ -1,6 +1,6 @@
 package com.qdivision.sandwichapi.rabbit
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
@@ -9,14 +9,11 @@ class RabbitSender(
     val rabbitTemplate: RabbitTemplate
 ) {
 
-    fun send(message: IngredientMessage) {
-        val msg = ObjectMapper().writeValueAsString(message)
-
-//    fun send(message: Any) {
-        println("Sending message...")
+    fun send(rawMessage: IngredientMessage) {
         val exchangeName = RabbitConnection.topicExchangeName
         val routingKey = "food.sandwich"
-        rabbitTemplate.convertAndSend(exchangeName, routingKey, msg)
+        val message = jacksonObjectMapper().writeValueAsString(rawMessage)
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, message)
     }
 
 }
