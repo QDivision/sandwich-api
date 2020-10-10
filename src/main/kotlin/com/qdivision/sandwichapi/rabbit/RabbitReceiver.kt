@@ -7,7 +7,7 @@ import java.util.UUID
 
 data class IngredientMessageHandler(
     val id: UUID,
-    val handler: (msg: IngredientMessage) -> Any?
+    val handler: (msg: IngredientResponse) -> Any?
 )
 
 @Component
@@ -15,7 +15,7 @@ class RabbitReceiver {
 
     private val handlers = mutableListOf<IngredientMessageHandler>()
 
-    fun registerHandler(id: UUID, handler: (msg: IngredientMessage) -> Any?) {
+    fun registerHandler(id: UUID, handler: (msg: IngredientResponse) -> Any?) {
         handlers.add(IngredientMessageHandler(id = id, handler = handler))
     }
 
@@ -24,7 +24,7 @@ class RabbitReceiver {
     }
 
     fun receiveMessage(rawMessage: String) {
-        val message = jacksonObjectMapper().readValue<IngredientMessage>(rawMessage)
+        val message = jacksonObjectMapper().readValue<IngredientResponse>(rawMessage)
         handlers.filter { it.id == message.id }.forEach { it.handler(message) }
     }
 

@@ -9,9 +9,9 @@ class RabbitSender(
     val rabbitTemplate: RabbitTemplate
 ) {
 
-    fun send(rawMessage: IngredientMessage) {
+    fun send(rawMessage: IngredientRequest) {
         val exchangeName = RabbitConnection.topicExchangeName
-        val routingKey = "food.sandwich"
+        val routingKey = RabbitConnection.requestRoutingKey
         val message = jacksonObjectMapper().writeValueAsString(rawMessage)
         rabbitTemplate.convertAndSend(exchangeName, routingKey, message)
     }

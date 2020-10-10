@@ -1,8 +1,7 @@
 package com.qdivision.sandwichapi.controller
 
 import com.qdivision.sandwichapi.entity.SandwichEntity
-import com.qdivision.sandwichapi.rabbit.Ingredient
-import com.qdivision.sandwichapi.rabbit.IngredientMessage
+import com.qdivision.sandwichapi.rabbit.IngredientRequest
 import com.qdivision.sandwichapi.rabbit.RabbitReceiver
 import com.qdivision.sandwichapi.rabbit.RabbitSender
 import com.qdivision.sandwichapi.repository.SandwichRepository
@@ -28,10 +27,7 @@ class SandwichController(
     fun postSandwich(@RequestBody sandwich: SandwichEntity): DeferredResult<Unit> {
         val result = DeferredResult<Unit>()
 
-        val msg = IngredientMessage(id = UUID.randomUUID(), ingredient = Ingredient(
-            name = sandwich.bread.name,
-            emoji = sandwich.bread.emoji
-        ))
+        val msg = IngredientRequest(id = UUID.randomUUID(), name = sandwich.bread.name)
         receiver.registerHandler(msg.id) {
             result.setResult(Unit)
             receiver.unregisterHandler(msg.id)

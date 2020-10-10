@@ -13,23 +13,30 @@ import org.springframework.stereotype.Component
 class RabbitConnection {
 
     @Bean
-    fun queue() = Queue(queueName, false)
+    fun responseQueue() = Queue(responseQueueName, false)
+
+    @Bean
+    fun requestQueue() = Queue(requestQueueName, false)
 
     @Bean
     fun exchange() = TopicExchange(topicExchangeName)
 
     @Bean
-    fun binding(queue: Queue, exchange: TopicExchange) =
-        BindingBuilder.bind(queue).to(exchange).with(routingKey)
+    fun responseQueueBinding(exchange: TopicExchange) =
+        BindingBuilder.bind(responseQueue()).to(exchange).with(responseRoutingKey)
 
     @Bean
-    fun container(
+    fun requestQueueBinding(exchange: TopicExchange) =
+        BindingBuilder.bind(requestQueue()).to(exchange).with(requestRoutingKey)
+
+    @Bean
+    fun incomingContainer(
         connectionFactory: ConnectionFactory,
         listenerAdapter: MessageListenerAdapter
     ): SimpleMessageListenerContainer {
         val container = SimpleMessageListenerContainer()
         container.connectionFactory = connectionFactory
-        container.setQueueNames(queueName)
+        container.setQueueNames(responseQueueName)
         container.setMessageListener(listenerAdapter)
         return container
     }
@@ -40,8 +47,10 @@ class RabbitConnection {
 
     companion object {
         const val topicExchangeName = "food-exchange"
-        const val queueName = "food-queue"
-        const val routingKey = "food.ingredient.exists.*"
+        const val responseQueueName = "response-food-queue"
+        const val requestQueueName = "request-food-queue"
+        const val requestRoutingKey = "food.ingredient.exists.request"
+        const val responseRoutingKey = "food.ingredient.exists.response"
     }
 
 }
