@@ -7,20 +7,25 @@ import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Table
 
-data class Bread(
-    val name: String,
+interface Ingredient {
+    val name: String
     val emoji: String
-)
+}
+
+data class Bread(
+    override val name: String,
+    override val emoji: String
+): Ingredient
 
 data class Condiment(
-    val name: String,
-    val emoji: String
-)
+    override val name: String,
+    override val emoji: String
+): Ingredient
 
 data class Layer(
-    val name: String,
-    val emoji: String
-)
+    override val name: String,
+    override val emoji: String
+): Ingredient
 
 @Entity
 @Table(name = "sandwiches")
