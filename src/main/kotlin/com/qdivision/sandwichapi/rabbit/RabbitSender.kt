@@ -13,6 +13,8 @@ class RabbitSender(
         val exchangeName = RabbitConnection.topicExchangeName
         val routingKey = RabbitConnection.requestRoutingKey
         val message = jacksonObjectMapper().writeValueAsString(rawMessage)
+
+        println("Sending message to RabbitMQ: $message")
         rabbitTemplate.convertAndSend(exchangeName, routingKey, message)
     }
 

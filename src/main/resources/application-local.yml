@@ -1,17 +1,10 @@
 spring:
-  jpa:
-    show-sql: true
+#  jpa:
+#    show-sql: true
   datasource:
-    username: admin
-    password: admin
     url: jdbc:postgresql://localhost:5000/sandwichdb
-  liquibase:
-    user: admin
-    password: admin
   rabbitmq:
     host: localhost
-    username: admin
-    password: admin
     port: 5003
 
 server:

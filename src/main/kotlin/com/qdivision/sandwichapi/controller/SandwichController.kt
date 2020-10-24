@@ -33,6 +33,8 @@ class SandwichController(
 
     @PostMapping("/sandwiches")
     fun postSandwich(@RequestBody sandwich: SandwichEntity): DeferredResult<Unit> {
+        println("Creating sandwich: ${sandwich.name}")
+
         val result = DeferredResult<Unit>()
 
         val ingredients = listOf(sandwich.bread) + sandwich.condiments + sandwich.layers

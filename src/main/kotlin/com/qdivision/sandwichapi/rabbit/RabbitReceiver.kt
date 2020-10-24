@@ -25,6 +25,8 @@ class RabbitReceiver {
 
     fun receiveMessage(rawMessage: String) {
         val message = jacksonObjectMapper().readValue<IngredientResponse>(rawMessage)
+
+        println("Got response from RabbitMQ: $message")
         handlers.filter { it.id == message.id }.forEach { it.handler(message) }
     }
 
